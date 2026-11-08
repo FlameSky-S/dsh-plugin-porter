@@ -1,5 +1,7 @@
 # dsh-plugin-porter
 
+[![Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml/badge.svg)](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml)
+
 Export installed DSH plugins — with their **dependency closure** and **documentation** — to removable media, then install or update them inside an isolated intranet from that folder. It also bootstraps itself on the intranet without npm, pnpm, or network access.
 
 ## Why
@@ -78,6 +80,10 @@ The `dsh-plugin-porter/` directory is a complete bundle. Install it with DSH's p
 - **Export**: lists installed plugins with size, direct dependency count, docs count, bundle/UI flags. Options: include local docs, fetch upstream GitHub READMEs. Computes `dependencies` + `optionalDependencies` transitively; skips `peerDependencies` / `devDependencies`; treats `@deepseek-ai/*` as runtime-provided.
 - **Import**: verifies checksums, shows source DSH version, target profile, and per-plugin status. Installs the whole closure of each selected plugin.
 - **About**: workflow, layout, limits.
+
+## GitHub Actions
+
+The `Build plugin package` workflow builds and uploads a zip artifact on every push to `main`. Pushing a `v*` tag publishes a GitHub Release with the same zip and its `.sha256`. Build output is not committed; `dist/` is ignored.
 
 ## CLI
 

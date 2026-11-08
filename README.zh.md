@@ -1,5 +1,7 @@
 # dsh-plugin-porter · 插件搬运助手
 
+[![Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml/badge.svg)](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml)
+
 把当前 DSH 里安装的插件（含**依赖闭包**和**文档**）导出成一个可刻盘 / 拷 U 盘的目录，带到隔离内网后，再从这个目录里选择安装或更新插件。
 
 它解决的是三个具体问题：
@@ -125,6 +127,10 @@ Linux / macOS：
 包含工作流、目录结构和限制说明。
 
 ---
+
+## GitHub Actions
+
+仓库的 `Build plugin package` 工作流会在每次推送 `main` 时构建 zip 并上传 artifact；推送 `v*` 标签时会用同一个 zip 创建 Release（附 `.sha256`）。构建产物不需要提交到仓库，`dist/` 已在 `.gitignore` 中忽略。
 
 ## 命令行
 
