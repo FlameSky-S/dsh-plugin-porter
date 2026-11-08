@@ -1,6 +1,9 @@
 # dsh-plugin-porter
 
+**English** | [简体中文](README.zh-CN.md)
+
 [![Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml/badge.svg)](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 Export installed DSH plugins — with their **dependency closure** and **documentation** — to removable media, then install or update them inside an isolated intranet from that folder. It also bootstraps itself on the intranet without npm, pnpm, or network access.
 
@@ -74,6 +77,8 @@ Linux/macOS:
 ## Install this plugin (developer machine)
 
 The `dsh-plugin-porter/` directory is a complete bundle. Install it with DSH's plugin manager (`plugin_manager` → `install_bundle`, target = absolute path of this directory), or with the desktop "install local plugin" action. Restart DSH and check **Settings → Plugin Porter**.
+
+For a prebuilt zip, download the latest `dsh-plugin-porter-<version>` artifact from the [Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml) workflow. Chinese users can read the full guide at [README.zh-CN.md](README.zh-CN.md).
 
 ## What the UI does
 

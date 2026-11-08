@@ -1,8 +1,17 @@
 # dsh-plugin-porter · 插件搬运助手
 
+[English](README.md) | **简体中文**
+
 [![Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml/badge.svg)](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](package.json)
+
+这是本项目的完整中文文档。仓库首页的英文说明见 [README.md](README.md)。
 
 把当前 DSH 里安装的插件（含**依赖闭包**和**文档**）导出成一个可刻盘 / 拷 U 盘的目录，带到隔离内网后，再从这个目录里选择安装或更新插件。
+
+> 仓库：<https://github.com/FlameSky-S/dsh-plugin-porter>  
+> 问题反馈：<https://github.com/FlameSky-S/dsh-plugin-porter/issues>
 
 它解决的是三个具体问题：
 
@@ -86,7 +95,22 @@ Linux / macOS：
 
 ## 安装本插件（开发 / 外网机器）
 
+### 方式 0：从 GitHub Actions 下载构建好的 zip（推荐给普通用户）
+
+1. 打开 [Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml) 工作流，点最近一次绿色运行。
+2. 在运行页面底部找到 **Artifacts**，下载 `dsh-plugin-porter-0.1.1`。
+3. 解压后按机器状态二选一：
+   - **内网机器还没有本插件**：运行 `scripts\install-porter.cmd`，把搬运助手装进默认的 `desktop` profile；
+   - **已经能在设置里看到「插件搬运」**：把解压目录作为本地 bundle 安装，或运行 `scripts\install-porter.ps1` 覆盖升级。
+4. 完全退出并重启 DSH。
+
+> GitHub Actions 的 artifact 下载需要登录 GitHub。如果维护者已经推送 `v0.1.1` 标签，[Releases](https://github.com/FlameSky-S/dsh-plugin-porter/releases) 页面会附同样的 zip 和 `.sha256`，可以直接拷到内网。
+
 ### 方式 A：从源码目录安装（推荐给开发者）
+
+```bash
+git clone https://github.com/FlameSky-S/dsh-plugin-porter.git
+```
 
 本仓库目录 `dsh-plugin-porter/` 就是一个完整 bundle。用 DSH 的插件管理器安装它：
 
@@ -109,7 +133,7 @@ Linux / macOS：
 - 显示体积、直接依赖数、文档数、是否 bundle / 是否有 Web UI。
 - 选项：
   - **包含文档**：复制包内 README / LICENSE / CHANGELOG 等。
-  - **抓取 GitHub 上游文档**：根据 `repository` 字段下载 `README.md`、`README.zh.md` 等（最多 2 个文件、单个不超过 2 MiB）。
+  - **抓取 GitHub 上游文档**：根据 `repository` 字段下载 `README.md`、`README.zh-CN.md` 等（最多 2 个文件、单个不超过 2 MiB）。
 - 导出时会计算完整依赖闭包：`dependencies` + `optionalDependencies`，跳过 `peerDependencies` / `devDependencies`；`@deepseek-ai/*` 视为 DSH 运行时自带，不打包。
 
 ### 导入页
@@ -131,6 +155,18 @@ Linux / macOS：
 ## GitHub Actions
 
 仓库的 `Build plugin package` 工作流会在每次推送 `main` 时构建 zip 并上传 artifact；推送 `v*` 标签时会用同一个 zip 创建 Release（附 `.sha256`）。构建产物不需要提交到仓库，`dist/` 已在 `.gitignore` 中忽略。
+
+### 发布新版本（维护者）
+
+1. 修改 `package.json` 里的 `version`，提交并推送 `main`。
+2. 打标签并推送：
+
+   ```bash
+   git tag v0.1.1
+   git push origin v0.1.1
+   ```
+
+3. 工作流会校验标签与 `package.json` 版本一致，然后创建 Release 并附上 zip 与 `.sha256`。
 
 ## 命令行
 
