@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="DSH Plugin Porter">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="16" x2="232" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2f6df6"/>
+      <stop offset="1" stop-color="#0b2f7a"/>
+    </linearGradient>
+    <linearGradient id="box" x1="86" y1="96" x2="170" y2="184" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d7e4ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#bg)"/>
+  <circle cx="128" cy="128" r="86" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="6"/>
+  <circle cx="128" cy="128" r="72" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="18"/>
+  <circle cx="128" cy="128" r="20" fill="#ffffff" fill-opacity="0.2"/>
+  <path d="M74 108 128 82l54 26-54 26-54-26Z" fill="url(#box)"/>
+  <path d="M74 108v38l54 28 54-28v-38l-54 26-54-26Z" fill="#bfd3ff"/>
+  <path d="M128 160v-30" stroke="#0b2f7a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M113 121l15 12 15-12" fill="none" stroke="#0b2f7a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M98 66v20M98 66l-8 8M98 66l8 8" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <path d="M158 190v-20M158 190l-8-8M158 190l8-8" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+</svg>

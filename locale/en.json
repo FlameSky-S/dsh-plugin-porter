@@ -1,0 +1,9 @@
+{
+  "meta": {
+    "title": "Plugin Porter",
+    "description": "Export DSH plugins with dependencies and docs to removable media, then scan and install or update them offline on an isolated network."
+  },
+  "entry": {
+    "label": "Plugin Porter"
+  }
+}

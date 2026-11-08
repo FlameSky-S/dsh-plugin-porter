@@ -1,0 +1,48 @@
+{
+  "name": "dsh-plugin-porter",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Export DSH plugins with their dependency closure and docs to removable media, then scan and install them into an isolated intranet profile.",
+  "type": "module",
+  "license": "MIT",
+  "author": "dsh-plugin-porter contributors",
+  "icon": "./icon.svg",
+  "engines": {
+    "dsh": ">=0.2.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-plugin-porter": "./bin/porter.mjs"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "lib/*.mjs",
+    "bin/*.mjs",
+    "scripts/*",
+    "locale/*.json",
+    "docs/*",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+name: Build plugin package
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read and verify version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          if [[ -z "$VERSION" ]]; then
+            echo "::error::package.json has no version"
+            exit 1
+          fi
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            TAG_VERSION="${GITHUB_REF_NAME#v}"
+            if [[ "$TAG_VERSION" != "$VERSION" ]]; then
+              echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${VERSION}"
+              exit 1
+            fi
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building dsh-plugin-porter $VERSION"
+
+      - name: Build zip and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p dist
+          zip -r "dist/dsh-plugin-porter-${VERSION}.zip" . \
+            -x ".git/*" "dist/*" "node_modules/*" "test/*" \
+               "*.log" ".DS_Store" "Thumbs.db"
+          sha256sum "dist/dsh-plugin-porter-${VERSION}.zip" \
+            > "dist/dsh-plugin-porter-${VERSION}.zip.sha256"
+          ls -lh dist
+          unzip -l "dist/dsh-plugin-porter-${VERSION}.zip"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-plugin-porter-${{ steps.version.outputs.version }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
