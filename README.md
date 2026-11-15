@@ -6,7 +6,7 @@
 
 [![Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml/badge.svg)](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](package.json)
 
 这是本项目的完整中文文档，也是 GitHub 仓库首页。英文说明见 [README.en.md](README.en.md)。
 
@@ -100,13 +100,13 @@ Linux / macOS：
 ### 方式 0：从 GitHub Actions 下载构建好的 zip（推荐给普通用户）
 
 1. 打开 [Build plugin package](https://github.com/FlameSky-S/dsh-plugin-porter/actions/workflows/build.yml) 工作流，点最近一次绿色运行。
-2. 在运行页面底部找到 **Artifacts**，下载 `dsh-plugin-porter-0.1.1`。
+2. 在运行页面底部找到 **Artifacts**，下载 `dsh-plugin-porter-0.1.2`。
 3. 解压后按机器状态二选一：
    - **内网机器还没有本插件**：运行 `scripts\install-porter.cmd`，把搬运助手装进默认的 `desktop` profile；
    - **已经能在设置里看到「插件搬运」**：把解压目录作为本地 bundle 安装，或运行 `scripts\install-porter.ps1` 覆盖升级。
 4. 完全退出并重启 DSH。
 
-> GitHub Actions 的 artifact 下载需要登录 GitHub。如果维护者已经推送 `v0.1.1` 标签，[Releases](https://github.com/FlameSky-S/dsh-plugin-porter/releases) 页面会附同样的 zip 和 `.sha256`，可以直接拷到内网。
+> GitHub Actions 的 artifact 下载需要登录 GitHub。如果维护者已经推送 `v0.1.2` 标签，[Releases](https://github.com/FlameSky-S/dsh-plugin-porter/releases) 页面会附同样的 zip 和 `.sha256`，可以直接拷到内网。
 
 ### 方式 A：从源码目录安装（推荐给开发者）
 
@@ -164,8 +164,8 @@ git clone https://github.com/FlameSky-S/dsh-plugin-porter.git
 2. 打标签并推送：
 
    ```bash
-   git tag v0.1.1
-   git push origin v0.1.1
+   git tag v0.1.2
+   git push origin v0.1.2
    ```
 
 3. 工作流会校验标签与 `package.json` 版本一致，然后创建 Release 并附上 zip 与 `.sha256`。
@@ -191,6 +191,9 @@ node bin/porter.mjs verify --dir E:\dsh-plugin-porter-export-20261107-161500
 
 # 安装 / 更新（--allow-unverified 仅用于你确认过来源的损坏校验文件）
 node bin/porter.mjs install --dir E:\... --plugins dsh-skill-hub
+
+# 修复 pnpm store 元数据（卸载插件报 ERROR_PNPM_UNEXPECTED_STORE 时）
+node bin/porter.mjs repair
 ```
 
 通用参数：`--profile-dir <path>`、`--json`、`--help`、`--version`。
@@ -293,6 +296,12 @@ DSH 启动时按 bundle 顺序解析 `node_modules`，不依赖 `pnpm-lock.yaml`
 ### 安装后插件没生效
 
 完全退出 DSH 再启动。Web 端刷新页面不会重新解析 bundle。
+
+### 卸载导入的插件时报 ERROR_PNPM_UNEXPECTED_STORE
+
+这个 profile 是从别的机器复制来的，`node_modules/.modules.yaml` 仍记着旧机器的 pnpm store。0.1.2 起，导入完成时和 DSH 启动时会自动把 `storeDir` 改成当前 `pnpm store path`；更新本插件并重启 DSH 后即可正常卸载。
+
+如果仍报错，先运行 DSH 自带 pnpm 的 `store path`，再把 `node_modules/.modules.yaml` 的 `storeDir` 改成该路径；也可以删除这个文件让 pnpm 在下次安装时重建（可能触发一次依赖重新落盘）。
 
 ---
 

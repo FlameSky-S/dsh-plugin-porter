@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-porter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Export DSH plugins with their dependency closure and docs to removable media, then scan and install them into an isolated intranet profile.",
   "type": "module",

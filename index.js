@@ -14,6 +14,7 @@ import {
 import { exportPlugins } from './lib/export.mjs';
 import { installExport, scanExport } from './lib/import.mjs';
 import { JobRegistry } from './lib/jobs.mjs';
+import { repairPnpmStoreMetadata } from './lib/pnpm.mjs';
 
 export const inject = ['webServer'];
 
@@ -194,10 +195,27 @@ function requireAbsoluteDir(value, label) {
   return path.resolve(trimmed);
 }
 
+async function repairExistingProfilePnpm(logger) {
+  try {
+    const profileDir = await resolveProfileDir();
+    const result = await repairPnpmStoreMetadata(profileDir);
+    if (result.status === 'repaired') {
+      logger?.info?.(`[dsh-plugin-porter] Updated pnpm store metadata to ${result.to}.`);
+    } else if (result.status === 'removed') {
+      logger?.warn?.('[dsh-plugin-porter] Removed stale pnpm store metadata; pnpm will rebuild it on the next add/remove.');
+    }
+  } catch (error) {
+    logger?.warn?.(
+      `[dsh-plugin-porter] Could not repair pnpm store metadata: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
 export function apply(ctx) {
   const logger = ctx.logger;
   const packagePromise = porterPackage();
   const jobs = new JobRegistry();
+  void repairExistingProfilePnpm(logger);
 
   const routeEntries = [
     route({

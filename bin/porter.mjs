@@ -11,6 +11,7 @@ import {
 } from '../lib/profile.mjs';
 import { exportPlugins } from '../lib/export.mjs';
 import { installExport, scanExport } from '../lib/import.mjs';
+import { repairPnpmStoreMetadata } from '../lib/pnpm.mjs';
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -25,6 +26,7 @@ function usage() {
   porter install --dir <导出目录> --plugins a,b
                                    安装/更新指定插件
   porter verify --dir <导出目录>    仅校验文件完整性
+  porter repair                    修复 pnpm store 元数据（卸载报错时使用）
   porter where                     显示插件包目录
 
 通用选项:
@@ -176,6 +178,27 @@ async function main() {
           { key: 'size', label: '大小', max: 12 },
         ],
       );
+    }
+    return 0;
+  }
+
+  if (command === 'repair') {
+    const result = await repairPnpmStoreMetadata(profileDir);
+    if (options.json) {
+      console.log(JSON.stringify({ profileDir, ...result }, null, 2));
+    } else {
+      console.log(`profile: ${profileDir}`);
+      if (result.status === 'repaired') {
+        console.log(`已修复 pnpm store 元数据: ${result.from} -> ${result.to}`);
+      } else if (result.status === 'removed') {
+        console.log(`已删除失效的 pnpm store 元数据: ${result.from}`);
+      } else if (result.status === 'ok') {
+        console.log('pnpm store 元数据正常。');
+      } else if (result.status === 'unrecorded') {
+        console.log('pnpm 元数据未记录 storeDir，无需修复。');
+      } else {
+        console.log('未找到 node_modules/.modules.yaml，无需修复。');
+      }
     }
     return 0;
   }

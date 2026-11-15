@@ -8,7 +8,7 @@
 {
   "schema": "dsh-plugin-porter/export@1",
   "createdAt": "2026-11-07T08:14:01.821Z",
-  "createdBy": { "name": "dsh-plugin-porter", "version": "0.1.1" },
+  "createdBy": { "name": "dsh-plugin-porter", "version": "0.1.2" },
   "source": {
     "profileDir": "C:\\Users\\alice\\.dsh\\profiles\\desktop",
     "profileName": "desktop",
@@ -90,6 +90,7 @@ install(dir, selected):
   update profile package.json:
     dependencies[plugin.name] = plugin.version
     dsh.profile.bundles += plugin.name (only when dsh.bundle.patch exists)
+  repair pnpm store metadata in node_modules/.modules.yaml
   on any failure: restore package dirs + package.json
   return { installed, restartRequired: true }
 ```
@@ -97,10 +98,11 @@ install(dir, selected):
 关键点：
 
 - **只操作当前 profile** 的 `node_modules` 与 `package.json`；
-- **不调用 pnpm**，不访问 registry；
+- **不调用 pnpm 安装、不访问 registry**；只用 DSH 自带的 `pnpm store path` 读取当前 store 路径，用于修复 `.modules.yaml`；
 - **先备份、后覆盖**，异常时回滚；
 - 写完 `package.json` 后重新读取校验，防止半写入；
-- `pnpm-lock.yaml` 不修改。
+- `pnpm-lock.yaml` 不修改；
+- 导入后与 DSH 启动时修复 `node_modules/.modules.yaml` 的 `storeDir` / `virtualStoreDir`。否则从别的机器复制来的 profile 会让 pnpm 在卸载时抛 `ERR_PNPM_UNEXPECTED_STORE`；无法解析 pnpm 且记录的 store 不存在时删除该文件，让 pnpm 下次重建。
 
 ## 4. HTTP 接口
 

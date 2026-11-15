@@ -99,6 +99,7 @@ node bin/porter.mjs export --plugins dsh-skill-hub,dsh-ssh --out D:\porter-out
 node bin/porter.mjs scan --dir E:\dsh-plugin-porter-export-...
 node bin/porter.mjs verify --dir E:\...
 node bin/porter.mjs install --dir E:\... --plugins dsh-skill-hub
+node bin/porter.mjs repair  # fix pnpm store metadata after ERR_PNPM_UNEXPECTED_STORE
 ```
 
 Global flags: `--profile-dir <path>`, `--json`, `--help`, `--version`.
@@ -136,6 +137,7 @@ Installation is transactional: `package.json` and every replaced package directo
 - **Scan is slow**: every file is hashed. Large exports take time.
 - **Upstream docs count is 0**: missing/non-GitHub `repository`, README filename not in the candidate list, or network restrictions. Local docs are still copied. On Windows the downloader falls back to PowerShell (system proxy); on Linux/macOS to `curl`.
 - **Plugin not active after install**: restart DSH; a browser refresh is not enough.
+- **Uninstalling an imported plugin fails with `ERR_PNPM_UNEXPECTED_STORE`**: the profile was copied from another machine and `node_modules/.modules.yaml` still records the old pnpm store. From 0.1.2, import and DSH startup rewrite `storeDir` to the current `pnpm store path`; update the porter and restart DSH. If it persists, set `storeDir` in `.modules.yaml` to the output of the bundled `pnpm store path`, or delete `.modules.yaml` so pnpm rebuilds it.
 
 ## Development
 
